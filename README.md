@@ -1,48 +1,76 @@
-# Skyline: Weather Bets on Rialo
+<div align="center">
 
-A simple bet between friends on tomorrow's weather. You stake an amount and pick a side. When the settlement time arrives, the contract wakes itself up, reads the real temperature off the internet, and splits the pot between the winners.
+# ☁️ Skyline
 
-## Running it
+**A weather bet between friends — powered by reactive, self-executing contracts.**
+
+Built as a concept demo for the **[Rialo](https://rialo.io)** Layer-1: a chain where smart contracts wake themselves up on a schedule and call the internet directly, no oracle and no external bot required.
+
+[**🔴 Live Demo**](https://hosam-rialo-sky.surge.sh) · [Report an issue](https://github.com/hosammahdy91/skyline-rialo/issues)
+
+![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)
+![Built with React](https://img.shields.io/badge/built%20with-React-61DAFB?logo=react&logoColor=white)
+![Firebase](https://img.shields.io/badge/backend-Firebase-FFCA28?logo=firebase&logoColor=white)
+
+</div>
+
+---
+
+## The idea
+
+Two friends. One question: *"Will tomorrow's temperature in Cairo go above 35°?"*
+
+Stake a bet, pick a side, and walk away. When the settlement time arrives, the contract:
+
+1. **Wakes itself up** — no cron job, no keeper bot watching a queue
+2. **Calls a real weather API directly** — no oracle network in between
+3. **Splits the pot automatically** among whoever guessed right
+
+This is a simulation of what becomes *native* on Rialo: reactive execution and native HTTPS calls built into the base layer, instead of assembled from three separate external systems.
+
+## Why this matters
+
+| What the app needs | On most chains today | On Rialo |
+|---|---|---|
+| Reading real-world data | An oracle contract + its own network | A direct HTTPS call from inside the contract |
+| Executing at a set time | An external keeper bot | A native on-chain time trigger |
+| Settlement | Manual logic once data arrives | Reactive execution the moment the condition is met |
+
+## Features
+
+- 🌡️ Create a room with a city, a temperature threshold, and a settlement time
+- 🤝 Friends join with a shared link and pick **Over** or **Under**
+- ⚡ Fully automatic settlement against a real weather reading ([Open-Meteo](https://open-meteo.com))
+- 💰 Pot splits instantly between winners, logged step-by-step
+- 🔄 Real-time shared state — every visitor sees the same rooms live (via Firestore)
+- 🛡️ A 15-minute minimum lead time on every bet, so no one can create and instantly settle a room
+
+## Tech stack
+
+| Layer | Choice | Why |
+|---|---|---|
+| Frontend | React + Vite | Fast builds, single-command dev server |
+| Shared state | Firebase Firestore | Stands in for Rialo's shared on-chain state until mainnet |
+| Weather data | Open-Meteo API | Free, no key — the same kind of call a Rialo contract would make natively |
+| Hosting | Surge.sh | Zero-config static hosting with real outbound network access |
+
+## Getting started
 
 ```bash
+git clone https://github.com/hosammahdy91/skyline-rialo.git
+cd skyline-rialo
 npm install
 npm run dev
 ```
 
-Then open http://localhost:5173.
+Then open `http://localhost:5173`.
 
-For a production build: `npm run build` then `npm run preview`.
+To build for production:
 
-## Why Rialo specifically
-
-On most other chains, this app needs three external pieces: an oracle to fetch the temperature, a keeper bot to wake the contract at the right time, and a server to host both. On Rialo, all three collapse into the base layer:
-
-| What the app needs | On typical chains | On Rialo |
-| --- | --- | --- |
-| Reading the temperature | An oracle contract plus its own network | An HTTPS call from inside the contract |
-| Executing at a set time | An external bot watching and sending a tx | A native on-chain time trigger |
-| Settlement | Manual logic once data arrives | Reactive execution once the condition is met |
-
-## Structure
-
-```
-src/
-  lib/chain.js             Reactive-contract simulation: deploy, time trigger, HTTPS call, settle
-  components/Dial.jsx      Temperature dial, compares the reading to the agreed threshold
-  components/ChainLog.jsx  Step-by-step log of what the contract is doing
-  components/NewRoom.jsx   Room creation
-  App.jsx                  Screens and navigation
-  styles.css               Design system
+```bash
+npm run build
 ```
 
-### `src/lib/chain.js` is the swap point
+> **Note:** the app connects to a shared Firebase project for demo purposes. To run your own independent instance, replace the `firebaseConfig` object in `src/lib/chain.js` with your own Firebase project's credentials.
 
-All the "chain" logic is isolated in this file and stores state in `localStorage`. Once the real Rialo mainnet is live, its contents get replaced with real SDK calls. `createRoom` becomes a contract deploy, `joinRoom` a deposit transaction, and `settle` disappears entirely because the contract handles it on-chain. Nothing else changes.
-
-The temperature source is Open-Meteo (open-meteo.com), free with no API key, standing in for the same kind of API the contract would call on the real network.
-
-## Notes on the demo
-
-- The "Fast-forward to settlement" button inside a room jumps the settlement time to now, so you can see the full cycle without waiting a day.
-- The tokens used in the app are for demo purposes only and have no real value. Rialo has not announced a real token yet.
-- Storage is local to the browser. The "Clear all rooms" button on the home screen resets everything.
+## Project structure
