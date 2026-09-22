@@ -2,7 +2,7 @@
 
 # ☁️ Skyline
 
-**A weather bet between friends — powered by reactive, self-executing contracts.**
+**A weather bet between friends powered by reactive, self-executing contracts.**
 
 Built as a concept demo for the **[Rialo](https://rialo.io)** Layer-1: a chain where smart contracts wake themselves up on a schedule and call the internet directly, no oracle and no external bot required.
 
@@ -22,8 +22,8 @@ Two friends. One question: *"Will tomorrow's temperature in Cairo go above 35°?
 
 Stake a bet, pick a side, and walk away. When the settlement time arrives, the contract:
 
-1. **Wakes itself up** — no cron job, no keeper bot watching a queue
-2. **Calls a real weather API directly** — no oracle network in between
+1. **Wakes itself up** no cron job, no keeper bot watching a queue
+2. **Calls a real weather API directly** no oracle network in between
 3. **Splits the pot automatically** among whoever guessed right
 
 This is a simulation of what becomes *native* on Rialo: reactive execution and native HTTPS calls built into the base layer, instead of assembled from three separate external systems.
@@ -42,7 +42,7 @@ This is a simulation of what becomes *native* on Rialo: reactive execution and n
 - 🤝 Friends join with a shared link and pick **Over** or **Under**
 - ⚡ Fully automatic settlement against a real weather reading ([Open-Meteo](https://open-meteo.com))
 - 💰 Pot splits instantly between winners, logged step-by-step
-- 🔄 Real-time shared state — every visitor sees the same rooms live (via Firestore)
+- 🔄 Real-time shared state every visitor sees the same rooms live (via Firestore)
 - 🛡️ A 15-minute minimum lead time on every bet, so no one can create and instantly settle a room
 
 ## Tech stack
@@ -51,7 +51,7 @@ This is a simulation of what becomes *native* on Rialo: reactive execution and n
 |---|---|---|
 | Frontend | React + Vite | Fast builds, single-command dev server |
 | Shared state | Firebase Firestore | Stands in for Rialo's shared on-chain state until mainnet |
-| Weather data | Open-Meteo API | Free, no key — the same kind of call a Rialo contract would make natively |
+| Weather data | Open-Meteo API | Free, no ke the same kind of call a Rialo contract would make natively |
 | Hosting | Surge.sh | Zero-config static hosting with real outbound network access |
 
 ## Getting started
